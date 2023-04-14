@@ -20,7 +20,7 @@ namespace LOTTO
     /// </summary>
     public partial class MainWindow : Window
     {
-        byte[] bLotto_number = new byte[46];
+        bool[] bLotto_number = new bool[46];
         TextBox[] aBox = new TextBox[7];
         Button[] aButton = new Button[46];
         
@@ -55,7 +55,7 @@ namespace LOTTO
             }
             for (int k = 1; k < 46; k++)
             {
-                if (bLotto_number[k] > 0)
+                if (bLotto_number[k] == true)
                 {
                     aBox[j++].Text = string.Format("{0}", k);
                 }
@@ -67,7 +67,7 @@ namespace LOTTO
             for(int i=1; i<46; i++)
             {
                 aButton[i].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
-                bLotto_number[i] = 0;
+                bLotto_number[i] = false;
             }
         }
           
@@ -82,21 +82,21 @@ namespace LOTTO
             Button button = (Button)sender;
             int iCount = 0;
             int j = 1;
-            for (int i = 0; i < 46; i++)
+            for (int i = 1; i < 46; i++)
             {
-                if (bLotto_number[i] > 0)
+                if (bLotto_number[i] == true)
                 {
                     iCount++;
                 }
             }            
-            if ((bLotto_number[int.Parse(button.Content.ToString())] == 0) && (iCount<6 ))
+            if ((bLotto_number[int.Parse(button.Content.ToString())] == false) && (iCount<6 ))
             {
-                bLotto_number[int.Parse(button.Content.ToString())] = 1;
+                bLotto_number[int.Parse(button.Content.ToString())] = true;
                 button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
             }
-            else if ((bLotto_number[int.Parse(button.Content.ToString())] == 1) && (iCount <= 6))
+            else if ((bLotto_number[int.Parse(button.Content.ToString())] == true) && (iCount <= 6))
             {
-                bLotto_number[int.Parse(button.Content.ToString())] = 0;
+                bLotto_number[int.Parse(button.Content.ToString())] = false;
                 button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
             }            
             else
@@ -110,7 +110,7 @@ namespace LOTTO
 
             for(int i=1; i<46; i++)
             {
-                if (bLotto_number[i]>0)
+                if (bLotto_number[i]==true)
                 {
                     aBox[j++].Text = string.Format("{0}", i);
                 }
