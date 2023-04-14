@@ -20,10 +20,11 @@ namespace LOTTO
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool[] bLotto_number = new bool[46];
-        TextBox[] aBox = new TextBox[7];
-        Button[] aButton = new Button[46];
-        
+        bool[] baLotto_number = new bool[46];
+        TextBox[] caBox = new TextBox[7];
+        Button[] caButton = new Button[46];
+        int iCount = 0;
+
         public MainWindow()
         {
             
@@ -33,31 +34,31 @@ namespace LOTTO
         }
         private void rand_num_create()
         {
-            int[] rand_num = new int[6];
+            int[] iaRand_num = new int[6];
             int i = 0;
             int j = 1;
-            Random randomobj = new Random();
-            int randbuff = 0;
+            Random cRandomobj = new Random();
+            int iRandbuff = 0;
             button_clear();
             while (i<6)
             {
-                randbuff = randomobj.Next(1,45);
-                if (!Array.Exists(rand_num, x => x == randbuff))
+                iRandbuff = cRandomobj.Next(1,45);
+                if (!Array.Exists(iaRand_num, x => x == iRandbuff))
                 {
-                    rand_num[i++] = randbuff;
-                    bLotto_number[randbuff] = 1;
-                    aButton[randbuff].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
+                    iaRand_num[i++] = iRandbuff;
+                    baLotto_number[iRandbuff] = true;
+                    caButton[iRandbuff].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
                 }                
             }
             for (int k = 1; k < 7; k++)
             {
-                aBox[k].Text = "";
+                caBox[k].Text = "";
             }
             for (int k = 1; k < 46; k++)
             {
-                if (bLotto_number[k] == true)
+                if (baLotto_number[k] == true)
                 {
-                    aBox[j++].Text = string.Format("{0}", k);
+                    caBox[j++].Text = string.Format("{0}", k);
                 }
             }
 
@@ -66,8 +67,8 @@ namespace LOTTO
         {
             for(int i=1; i<46; i++)
             {
-                aButton[i].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
-                bLotto_number[i] = false;
+                caButton[i].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
+                baLotto_number[i] = false;
             }
         }
           
@@ -79,42 +80,37 @@ namespace LOTTO
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            int iCount = 0;
+            Button cButton = (Button)sender;            
             int j = 1;
-            for (int i = 1; i < 46; i++)
+               
+            if ((baLotto_number[int.Parse(cButton.Content.ToString())] == false) && (iCount<6 ))
             {
-                if (bLotto_number[i] == true)
-                {
-                    iCount++;
-                }
-            }            
-            if ((bLotto_number[int.Parse(button.Content.ToString())] == false) && (iCount<6 ))
-            {
-                bLotto_number[int.Parse(button.Content.ToString())] = true;
-                button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
+                baLotto_number[int.Parse(cButton.Content.ToString())] = true;
+                cButton.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
+                iCount++;
             }
-            else if ((bLotto_number[int.Parse(button.Content.ToString())] == true) && (iCount <= 6))
+            else if ((baLotto_number[int.Parse(cButton.Content.ToString())] == true) && (iCount <= 6))
             {
-                bLotto_number[int.Parse(button.Content.ToString())] = false;
-                button.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
+                baLotto_number[int.Parse(cButton.Content.ToString())] = false;
+                cButton.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#ffdddddd"));
+                iCount--;
             }            
             else
             {
                 MessageBox.Show("6개 이상 고르지 마세요.");
             }
-            for(int i=1; i<7; i++)
-            {
-                aBox[i].Text = "";
-            }
+            //for(int i=1; i<7; i++)
+            //{
+            //    caBox[i].Text = "";
+            //}
 
-            for(int i=1; i<46; i++)
-            {
-                if (bLotto_number[i]==true)
-                {
-                    aBox[j++].Text = string.Format("{0}", i);
-                }
-            }
+            //for(int i=1; i<46; i++)
+            //{
+            //    if (baLotto_number[i]==true)
+            //    {
+            //        caBox[j++].Text = string.Format("{0}", i);
+            //    }
+            //}
 
         }
 
@@ -122,14 +118,14 @@ namespace LOTTO
         {
             for (int i = 1; i < 46; i++)
             {
-                aButton[i] = this.FindName("button" + i.ToString()) as Button;
+                caButton[i] = this.FindName("button" + i.ToString()) as Button;
             }
         }
         private void create_array()
         {
             for (int i = 1; i<7; i++)
             {
-                aBox[i] = this.FindName("textBox" + i.ToString()) as TextBox;
+                caBox[i] = this.FindName("textBox" + i.ToString()) as TextBox;
             }          
         }
 
