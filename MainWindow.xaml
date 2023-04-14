@@ -59,13 +59,14 @@
                 <Button x:Name="button43" Content="43" HorizontalAlignment="Left" Margin="103,168,0,0" VerticalAlignment="Top" Height="35" Width="35" FontSize="16" Click="button1_Click"/>
                 <Button x:Name="button44" Content="44" HorizontalAlignment="Left" Margin="143,168,0,0" VerticalAlignment="Top" Height="35" Width="35" FontSize="16" Click="button1_Click"/>
                 <Button x:Name="button45" Content="45" HorizontalAlignment="Left" Margin="183,168,0,0" VerticalAlignment="Top" Height="35" Width="35" FontSize="16" Click="button1_Click"/>
-                <Button x:Name="button" Content="AUTO" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Height="43" Width="70" Click="button_Click"/>
-                <TextBox x:Name="textBox1" HorizontalAlignment="Left" Margin="183,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35"/>
-                <TextBox x:Name="textBox2" HorizontalAlignment="Left" Margin="223,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" RenderTransformOrigin="-0.123,0.897"/>
-                <TextBox x:Name="textBox3" HorizontalAlignment="Left" Margin="263,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35"/>
-                <TextBox x:Name="textBox4" HorizontalAlignment="Left" Margin="303,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35"/>
-                <TextBox x:Name="textBox5" HorizontalAlignment="Left" Margin="343,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35"/>
-                <TextBox x:Name="textBox6" HorizontalAlignment="Left" Margin="383,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35"/>
+                <Button x:Name="button" Content="AUTO ALL&#xD;&#xA;NUMBER" HorizontalAlignment="Left" Margin="10,227,0,0" VerticalAlignment="Top" Height="43" Width="70" Click="button_Click"/>
+                <TextBox x:Name="textBox1" HorizontalAlignment="Left" Margin="183,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                <TextBox x:Name="textBox2" HorizontalAlignment="Left" Margin="223,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                <TextBox x:Name="textBox3" HorizontalAlignment="Left" Margin="263,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="textBox4" HorizontalAlignment="Left" Margin="303,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="textBox5" HorizontalAlignment="Left" Margin="343,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="textBox6" HorizontalAlignment="Left" Margin="383,232,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="35" Height="35" FontSize="18" TextAlignment="Center" IsReadOnly="True" MaxLines="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Button x:Name="button_Copy" Content="AUTO FILL&#xD;&#xA;NUMBER" HorizontalAlignment="Left" Margin="85,227,0,0" VerticalAlignment="Top" Height="43" Width="70" Click="button_Click"/>
 
             </Grid>
         </TabItem>
