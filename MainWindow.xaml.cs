@@ -25,6 +25,7 @@ namespace LOTTO
         Button[] caButton = new Button[46];
         int iCount = 0;
 
+
         public MainWindow()
         {
             
@@ -34,18 +35,18 @@ namespace LOTTO
         }
         private void rand_num_create()
         {
-            int[] iaRand_num = new int[6];
-            int i = 0;
-            int j = 1;
             Random cRandomobj = new Random();
-            int iRandbuff = 0;
+            int[] iaRand_num = new int[6];                        
+            int iRandbuff = 0;            
+            int iBoxCount = 1;
             button_clear();
-            while (i<6)
+            iCount = 0;
+            while (iCount < 6)
             {
-                iRandbuff = cRandomobj.Next(1,45);
+                iRandbuff = cRandomobj.Next(1,46);
                 if (!Array.Exists(iaRand_num, x => x == iRandbuff))
                 {
-                    iaRand_num[i++] = iRandbuff;
+                    iaRand_num[iCount++] = iRandbuff;
                     baLotto_number[iRandbuff] = true;
                     caButton[iRandbuff].Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFE67474"));
                 }                
@@ -58,10 +59,9 @@ namespace LOTTO
             {
                 if (baLotto_number[k] == true)
                 {
-                    caBox[j++].Text = string.Format("{0}", k);
+                    caBox[iBoxCount++].Text = string.Format("{0}", k);
                 }
             }
-
         }
         private void button_clear()
         {
@@ -99,18 +99,18 @@ namespace LOTTO
             {
                 MessageBox.Show("6개 이상 고르지 마세요.");
             }
-            //for(int i=1; i<7; i++)
-            //{
-            //    caBox[i].Text = "";
-            //}
+            for (int i = 1; i < 7; i++)
+            {
+                caBox[i].Text = "";
+            }
 
-            //for(int i=1; i<46; i++)
-            //{
-            //    if (baLotto_number[i]==true)
-            //    {
-            //        caBox[j++].Text = string.Format("{0}", i);
-            //    }
-            //}
+            for (int i = 1; i < 46; i++)
+            {
+                if (baLotto_number[i] == true)
+                {
+                    caBox[j++].Text = string.Format("{0}", i);
+                }
+            }
 
         }
 
