@@ -154,33 +154,66 @@ namespace LOTTO
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            if ( (!string.IsNullOrEmpty(textBox_num.Text)) && (int.TryParse(textBox_num.Text,out _)))
+            if ( (!string.IsNullOrEmpty(textBox_num.Text)) && (int.TryParse(textBox_num.Text,out _)) && (!string.IsNullOrEmpty(textBox_num2.Text)) && (int.TryParse(textBox_num2.Text, out _)))
             {
-                string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + textBox_num.Text);
-
-                if(strBuff == "")
-                {
-                    textBox_json.Text = "불러오기 실패";
-                    return;
-                } 
+                int iStartnum = int.Parse(textBox_num.Text);
+                int iEndnum = int.Parse(textBox_num2.Text);
                 
-                textBox_json.Text = "";
-                JObject obj = JObject.Parse(strBuff);
+                int[] data = new int[46];
 
-                if (obj["returnValue"].ToString() == "success")
+                for (int i = iStartnum; i < iEndnum + 1; i++)
                 {
-                    textBox_json.Text += "날짜: " + obj["drwNoDate"].ToString() + "\n";
-                    textBox_json.Text += "당첨번호: " + obj["drwtNo1"].ToString() + ", " + obj["drwtNo2"].ToString() + ", "
-                        + obj["drwtNo3"].ToString() + ", " + obj["drwtNo4"].ToString() + ", " + obj["drwtNo5"].ToString() + ", "
-                        + obj["drwtNo6"].ToString()  + "\n";               
+                    string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + i.ToString());
+                    if (strBuff == "")
+                    {
+                       
+                    }
+                    else
+                    {
+                        JObject obj = JObject.Parse(strBuff);
+                        if (obj["returnValue"].ToString() == "success")
+                        { 
+                            data[(int)obj["drwtNo1"]] += 1;
+                            data[(int)obj["drwtNo2"]] += 1;
+                            data[(int)obj["drwtNo3"]] += 1;
+                            data[(int)obj["drwtNo4"]] += 1;
+                            data[(int)obj["drwtNo5"]] += 1;
+                            data[(int)obj["drwtNo6"]] += 1;
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
 
                 }
-                else
-                {
-                    textBox_json.Text = "불러오기 실패"
-                }
-                
-                
+                string s = String.Join(", ", data);
+                textBox_json.Text = s;
+                //string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + textBox_num.Text);
+
+                //if (strBuff == "")
+                //{
+                //    textBox_json.Text = "불러오기 실패";
+                //    return;
+                //}
+
+                //textBox_json.Text = "";
+                //JObject obj = JObject.Parse(strBuff);
+
+                //if (obj["returnValue"].ToString() == "success")
+                //{
+                //    textBox_json.Text += "날짜: " + obj["drwNoDate"].ToString() + "\n";
+                //    textBox_json.Text += "당첨번호: " + obj["drwtNo1"].ToString() + ", " + obj["drwtNo2"].ToString() + ", "
+                //        + obj["drwtNo3"].ToString() + ", " + obj["drwtNo4"].ToString() + ", " + obj["drwtNo5"].ToString() + ", "
+                //        + obj["drwtNo6"].ToString() + "\n";
+                //    Debug.WriteLine(obj["drwtNo3"].GetType().Name);
+                //}
+                //else
+                //{
+                //    textBox_json.Text = "불러오기 실패";
+                //}
+
+
             }
             else
             {
@@ -188,6 +221,9 @@ namespace LOTTO
             }
             
         }
+
+        
+
 
         private string GetHttpString(string strUri)
         {
