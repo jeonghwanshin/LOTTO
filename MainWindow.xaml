@@ -75,10 +75,13 @@
                 <Button x:Name="button" Content="회차검색" HorizontalAlignment="Left" Margin="10,25,0,0" VerticalAlignment="Top" Click="button_Click"/>
                 <TextBox x:Name="textBox_json" HorizontalAlignment="Center" Margin="0,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="424" Height="335"/>
                 <TextBox x:Name="textBox_num" HorizontalAlignment="Left" Margin="80,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="52" ToolTip="최소값"/>
-                <ProgressBar HorizontalAlignment="Left" Height="19" Margin="235,26,0,0" VerticalAlignment="Top" Width="168"/>
+                <ProgressBar x:Name="prog_bar" HorizontalAlignment="Left" Height="19" Margin="235,26,0,0" VerticalAlignment="Top" Width="168"/>
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="311,27,0,0" TextWrapping="Wrap" Text="{Binding ElementName=prog_bar,Path=Value,StringFormat={}{0:0}%}" VerticalAlignment="Top"/>
                 <TextBox x:Name="textBox_num2" HorizontalAlignment="Left" Margin="160,26,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="52" ToolTip="최대값"/>
                 <Label x:Name="label" Content="시작 회차" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top"/>
                 <Label x:Name="label_Copy" Content="검색 끝 회차" HorizontalAlignment="Left" Margin="150,0,0,0" VerticalAlignment="Top"/>
+                
+
 
             </Grid>
         </TabItem>

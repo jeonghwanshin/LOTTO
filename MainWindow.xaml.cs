@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using Newtonsoft.Json;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,6 +18,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel;
+using System.Windows.Threading;
 
 namespace LOTTO
 {
@@ -29,7 +32,7 @@ namespace LOTTO
         TextBox[] caBox = new TextBox[7];
         Button[] caButton = new Button[46];
         int iCount = 0;
-
+        BackgroundWorker worker = null;
 
         public MainWindow()
         {
@@ -156,9 +159,32 @@ namespace LOTTO
         {
             if ( (!string.IsNullOrEmpty(textBox_num.Text)) && (int.TryParse(textBox_num.Text,out _)) && (!string.IsNullOrEmpty(textBox_num2.Text)) && (int.TryParse(textBox_num2.Text, out _)))
             {
-                int iStartnum = int.Parse(textBox_num.Text);
-                int iEndnum = int.Parse(textBox_num2.Text);
-                
+                button.IsEnabled = false;
+                worker = new BackgroundWorker();
+                worker.WorkerReportsProgress = true;
+                worker.DoWork += worker_dowork;
+                worker.ProgressChanged += worker_progress;                
+                worker.RunWorkerAsync();                
+            }
+            else
+            {
+                textBox_json.Text = "제대로된 값을 입력하슈";
+            }
+            
+        }
+
+        private void worker_dowork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                int iStartnum = 0;
+                int iEndnum = 0;
+                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                {
+                    iStartnum = int.Parse(textBox_num.Text);
+                    iEndnum = int.Parse(textBox_num2.Text);
+                }));
+                int iTotnum = iEndnum - iStartnum +1;
                 int[] data = new int[46];
 
                 for (int i = iStartnum; i < iEndnum + 1; i++)
@@ -166,13 +192,13 @@ namespace LOTTO
                     string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + i.ToString());
                     if (strBuff == "")
                     {
-                       
+                        Debug.WriteLine("no data " + i.ToString() + "회차");
                     }
                     else
                     {
                         JObject obj = JObject.Parse(strBuff);
                         if (obj["returnValue"].ToString() == "success")
-                        { 
+                        {
                             data[(int)obj["drwtNo1"]] += 1;
                             data[(int)obj["drwtNo2"]] += 1;
                             data[(int)obj["drwtNo3"]] += 1;
@@ -182,48 +208,43 @@ namespace LOTTO
                         }
                         else
                         {
-                            
+                            Debug.WriteLine("failed " + i.ToString() + "회차");
                         }
                     }
-
+                    Debug.WriteLine(((float)i / iTotnum) * 100);
+                    Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                    {
+                        prog_bar.Value = (int)(((float)i / iTotnum) * 100);
+                    }));
+                    //worker.ReportProgress((int)((float)i/iTotnum)*100);
+                    Thread.Sleep(5);
                 }
                 string s = String.Join(", ", data);
-                textBox_json.Text = s;
-                //string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + textBox_num.Text);
-
-                //if (strBuff == "")
-                //{
-                //    textBox_json.Text = "불러오기 실패";
-                //    return;
-                //}
-
-                //textBox_json.Text = "";
-                //JObject obj = JObject.Parse(strBuff);
-
-                //if (obj["returnValue"].ToString() == "success")
-                //{
-                //    textBox_json.Text += "날짜: " + obj["drwNoDate"].ToString() + "\n";
-                //    textBox_json.Text += "당첨번호: " + obj["drwtNo1"].ToString() + ", " + obj["drwtNo2"].ToString() + ", "
-                //        + obj["drwtNo3"].ToString() + ", " + obj["drwtNo4"].ToString() + ", " + obj["drwtNo5"].ToString() + ", "
-                //        + obj["drwtNo6"].ToString() + "\n";
-                //    Debug.WriteLine(obj["drwtNo3"].GetType().Name);
-                //}
-                //else
-                //{
-                //    textBox_json.Text = "불러오기 실패";
-                //}
-
-
-            }
-            else
+                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+                {
+                    textBox_json.Text = s;
+                    button.IsEnabled = true;
+                }));
+                
+                
+            }  
+            catch (Exception ex)
             {
-                textBox_json.Text = "제대로된 값을 입력하슈";
+                Debug.WriteLine (ex.ToString());   
             }
-            
+        }
+        private void worker_progress(object sender, ProgressChangedEventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine(e.ProgressPercentage);
+                prog_bar.Value = e.ProgressPercentage;
+            }
+            catch (Exception ex)
+            { Debug.WriteLine (ex.ToString()); }
         }
 
         
-
 
         private string GetHttpString(string strUri)
         {
@@ -254,3 +275,28 @@ namespace LOTTO
 
     }
 }
+
+
+//string strBuff = GetHttpString("https://www.dhlottery.co.kr/common.do?method=getLottoNumber&drwNo=" + textBox_num.Text);
+
+//if (strBuff == "")
+//{
+//    textBox_json.Text = "불러오기 실패";
+//    return;
+//}
+
+//textBox_json.Text = "";
+//JObject obj = JObject.Parse(strBuff);
+
+//if (obj["returnValue"].ToString() == "success")
+//{
+//    textBox_json.Text += "날짜: " + obj["drwNoDate"].ToString() + "\n";
+//    textBox_json.Text += "당첨번호: " + obj["drwtNo1"].ToString() + ", " + obj["drwtNo2"].ToString() + ", "
+//        + obj["drwtNo3"].ToString() + ", " + obj["drwtNo4"].ToString() + ", " + obj["drwtNo5"].ToString() + ", "
+//        + obj["drwtNo6"].ToString() + "\n";
+//    Debug.WriteLine(obj["drwtNo3"].GetType().Name);
+//}
+//else
+//{
+//    textBox_json.Text = "불러오기 실패";
+//}
