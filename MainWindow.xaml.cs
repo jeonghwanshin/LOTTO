@@ -20,6 +20,9 @@ using System.Windows.Shapes;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Windows.Threading;
+using LiveCharts;
+using LiveCharts.Helpers;
+using LiveCharts.Wpf.Charts.Base;
 
 namespace LOTTO
 {
@@ -33,6 +36,7 @@ namespace LOTTO
         Button[] caButton = new Button[46];
         int iCount = 0;
         BackgroundWorker worker = null;
+       
 
         public MainWindow()
         {
@@ -40,6 +44,8 @@ namespace LOTTO
             InitializeComponent();
             create_array();
             create_button();
+            
+            
         }
         private void rand_num_create(bool bAll_rand)
         {
@@ -157,20 +163,19 @@ namespace LOTTO
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
-            if ( (!string.IsNullOrEmpty(textBox_num.Text)) && (int.TryParse(textBox_num.Text,out _)) && (!string.IsNullOrEmpty(textBox_num2.Text)) && (int.TryParse(textBox_num2.Text, out _)))
+            if ((!string.IsNullOrEmpty(textBox_num.Text)) && (int.TryParse(textBox_num.Text, out _)) && (!string.IsNullOrEmpty(textBox_num2.Text)) && (int.TryParse(textBox_num2.Text, out _)))
             {
                 button.IsEnabled = false;
                 worker = new BackgroundWorker();
                 worker.WorkerReportsProgress = true;
                 worker.DoWork += worker_dowork;
-                worker.ProgressChanged += worker_progress;                
-                worker.RunWorkerAsync();                
+                worker.ProgressChanged += worker_progress;
+                worker.RunWorkerAsync();
             }
             else
             {
                 textBox_json.Text = "제대로된 값을 입력하슈";
-            }
-            
+            }            
         }
 
         private void worker_dowork(object sender, DoWorkEventArgs e)
@@ -219,11 +224,19 @@ namespace LOTTO
                     //worker.ReportProgress((int)((float)i/iTotnum)*100);
                     Thread.Sleep(5);
                 }
-                string s = String.Join(", ", data);
+                data = data.Skip(1).ToArray();
+                string s = String.Join(", ", data);                
+                List<int> ints = data.ToList();
                 Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                 {
                     textBox_json.Text = s;
+                    Chart.Series.Add(new LiveCharts.Wpf.ColumnSeries()
+                    {
+                        Values = new LiveCharts.ChartValues<int>(ints)
+                    });
+                    Chart.Series.
                     button.IsEnabled = true;
+
                 }));
                 
                 
