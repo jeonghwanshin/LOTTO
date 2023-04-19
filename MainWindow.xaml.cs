@@ -36,16 +36,15 @@ namespace LOTTO
         Button[] caButton = new Button[46];
         int iCount = 0;
         BackgroundWorker worker = null;
-       
+        //public ChartValues<int> Values { get; set; }
 
         public MainWindow()
-        {
-            
+        {            
             InitializeComponent();
             create_array();
             create_button();
-            
-            
+            //DataContext = this;
+            //Values = new ChartValues<int>();
         }
         private void rand_num_create(bool bAll_rand)
         {
@@ -230,13 +229,25 @@ namespace LOTTO
                 Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                 {
                     textBox_json.Text = s;
+                    try
+                    {
+                        Chart.Series.Clear();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex);
+                    }
+                    
                     Chart.Series.Add(new LiveCharts.Wpf.ColumnSeries()
                     {
+                        Title = "횟수",                        
+                        Fill = Brushes.Orange,
                         Values = new LiveCharts.ChartValues<int>(ints)
-                    });
-                    Chart.Series.
-                    button.IsEnabled = true;
 
+                    }); ;
+
+                    button.IsEnabled = true;
+                    
                 }));
                 
                 
